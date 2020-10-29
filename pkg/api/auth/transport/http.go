@@ -4,13 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/labstack/echo"
 	"github.com/mythio/go-rest-starter/pkg/api/auth"
 	"github.com/mythio/go-rest-starter/pkg/common/model"
-)
-
-var (
-	errPasswordsNotMaching = echo.NewHTTPError(http.StatusBadRequest, "passwords do not match")
 )
 
 // HTTP represents user http service
