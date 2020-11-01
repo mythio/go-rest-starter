@@ -1,8 +1,6 @@
 package mysql
 
 import (
-	"time"
-
 	"github.com/mythio/go-rest-starter/pkg/common/model"
 	"gorm.io/gorm"
 )
@@ -31,18 +29,4 @@ func (User) FindByEmail(db *gorm.DB, email string) (model.User, error) {
 	result := db.Where("email = ? and deleted_at = ?", email, 0).First(&user)
 
 	return user, result.Error
-}
-
-// Update updates user's contact info
-func (User) Update(db *gorm.DB, user model.User) error {
-	result := db.Model(&user).Where("deleted_at = ?", 0).Updates(&user)
-
-	return result.Error
-}
-
-// Delete sets deleted_at for a user
-func (User) Delete(db *gorm.DB, id uint32) error {
-	user := &model.User{}
-	result := db.Model(&user).Where("deleted_at = ?", 0).Update("deleted_at", time.Now().UTC().Unix())
-	return result.Error
 }
