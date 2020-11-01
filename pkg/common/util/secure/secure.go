@@ -1,4 +1,4 @@
-package util
+package secure
 
 import (
 	"hash"
