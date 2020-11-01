@@ -2,16 +2,16 @@ package auth
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/mythio/go-rest-starter/pkg/common/model"
 	"github.com/mythio/go-rest-starter/pkg/common/model/res"
-	"gorm.io/gorm"
 )
 
 // Signup creates a new user account
 func (a *Auth) Signup(user model.User) (res.AuthUser, error) {
 	existingUser, err := a.uRepo.FindByEmail(a.db, user.Email)
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil {
 		return res.AuthUser{}, err
 	}
 
@@ -39,7 +39,8 @@ func (a *Auth) Signup(user model.User) (res.AuthUser, error) {
 // Signin gets existing user account
 func (a *Auth) Signin(user model.User) (res.AuthUser, error) {
 	existingUser, err := a.uRepo.FindByEmail(a.db, user.Email)
-	if err != nil && err != gorm.ErrRecordNotFound {
+	if err != nil {
+		fmt.Println("errrrr", err)
 		return res.AuthUser{}, err
 	}
 
@@ -63,6 +64,6 @@ func (a *Auth) Signin(user model.User) (res.AuthUser, error) {
 }
 
 // Me returns the current user
-func (a *Auth) Me(id uint32) (model.User, error) {
+func (a *Auth) Me(id int64) (model.User, error) {
 	return a.uRepo.FindByID(a.db, id)
 }

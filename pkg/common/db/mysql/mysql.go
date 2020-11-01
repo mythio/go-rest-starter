@@ -1,15 +1,15 @@
 package mysql
 
 import (
-	"github.com/mythio/go-rest-starter/pkg/common/model"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	"database/sql"
+
+	// Imported for mysql connection
+	_ "github.com/go-sql-driver/mysql"
 )
 
-func NewConnection(connectionURL string) (*gorm.DB, error) {
-	db, err := gorm.Open(mysql.Open(connectionURL), &gorm.Config{})
-
-	db.AutoMigrate(&model.User{})
+// NewConnection creates a new connection to mySQL DB
+func NewConnection(connectionURL string) (*sql.DB, error) {
+	db, err := sql.Open("mysql", connectionURL)
 	if err != nil {
 		return nil, err
 	}

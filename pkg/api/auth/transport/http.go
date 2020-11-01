@@ -96,7 +96,7 @@ func (h *HTTP) signin(c *gin.Context) {
 }
 
 func (h *HTTP) me(c *gin.Context) {
-	meID := uint32(c.GetInt("id"))
+	meID := int64(c.GetInt("id"))
 	user, err := h.service.Me(meID)
 
 	fmt.Print(meID)
