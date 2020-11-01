@@ -50,7 +50,7 @@ func (s Service) ParseToken(authHeader string) (*jwt.Token, error) {
 // GenerateToken generates new JWT token and populates it with user data
 func (s Service) GenerateToken(u model.User) (string, error) {
 	return jwt.NewWithClaims(s.algo, jwt.MapClaims{
-		"id":  u.Base.ID,
+		"id":  u.ID,
 		"u":   u.Username,
 		"e":   u.Email,
 		"exp": time.Now().Add(s.ttl).Unix(),

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -36,6 +37,8 @@ func CheckAuthToken(t TokenParser) gin.HandlerFunc {
 		id := int(claims["id"].(float64))
 		email := claims["e"].(string)
 		username := claims["u"].(string)
+
+		fmt.Println("in token:", id, email, username)
 
 		c.Set("id", id)
 		c.Set("email", email)

@@ -1,6 +1,8 @@
 package mysql
 
 import (
+	"fmt"
+
 	"github.com/mythio/go-rest-starter/pkg/common/model"
 	"gorm.io/gorm"
 )
@@ -27,6 +29,7 @@ func (User) FindByID(db *gorm.DB, id uint32) (model.User, error) {
 func (User) FindByEmail(db *gorm.DB, email string) (model.User, error) {
 	var user model.User
 	result := db.Where("email = ? and deleted_at = ?", email, 0).First(&user)
+	fmt.Println("model", user)
 
 	return user, result.Error
 }

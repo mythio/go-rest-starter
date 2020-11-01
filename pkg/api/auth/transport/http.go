@@ -1,6 +1,7 @@
 package transport
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -95,5 +96,21 @@ func (h *HTTP) signin(c *gin.Context) {
 }
 
 func (h *HTTP) me(c *gin.Context) {
+	meID := uint32(c.GetInt("id"))
+	user, err := h.service.Me(meID)
 
+	fmt.Print(meID)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
 }

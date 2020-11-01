@@ -25,7 +25,7 @@ func (a *Auth) Signup(user model.User) (res.AuthUser, error) {
 		return res.AuthUser{}, err
 	}
 
-	accessToken, err := a.tk.GenerateToken(user)
+	accessToken, err := a.tk.GenerateToken(createdUser)
 	if err != nil {
 		return res.AuthUser{}, err
 	}
@@ -51,7 +51,7 @@ func (a *Auth) Signin(user model.User) (res.AuthUser, error) {
 		return res.AuthUser{}, errors.New("incorrect password")
 	}
 
-	accessToken, err := a.tk.GenerateToken(user)
+	accessToken, err := a.tk.GenerateToken(existingUser)
 	if err != nil {
 		return res.AuthUser{}, err
 	}
