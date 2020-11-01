@@ -2,12 +2,15 @@ package api
 
 import (
 	"crypto/sha1"
+	"fmt"
 
 	"github.com/mythio/go-rest-starter/pkg/api/auth"
-	ut "github.com/mythio/go-rest-starter/pkg/api/auth/transport"
+	authTransport "github.com/mythio/go-rest-starter/pkg/api/auth/transport"
+	"github.com/mythio/go-rest-starter/pkg/api/middleware"
 	"github.com/mythio/go-rest-starter/pkg/common/db/mysql"
-	"github.com/mythio/go-rest-starter/pkg/common/util"
+	"github.com/mythio/go-rest-starter/pkg/common/util/jwt"
 	"github.com/mythio/go-rest-starter/pkg/common/util/logger"
+	"github.com/mythio/go-rest-starter/pkg/common/util/secure"
 	"github.com/mythio/go-rest-starter/pkg/common/util/server"
 )
 
@@ -18,13 +21,19 @@ func Start() error {
 		return err
 	}
 
-	sec := util.New(sha1.New())
+	sec := secure.New(sha1.New())
 	log := logger.New()
+	tk, err := jwt.New("HS256", "secret", 5)
+	if err != nil {
+		fmt.Println(err)
+	}
 
-	e := server.New()
-	ut.NewHTTP(auth.InitService(db, sec, log), e)
+	s := server.New()
+	s.Use(middleware.CheckAuthToken(tk))
+	authRouter := s.Group("/auth")
+	authTransport.NewHTTP(auth.InitService(db, sec, log, tk), authRouter)
 
-	server.Start(e)
+	server.Start(s)
 
 	return nil
 }
