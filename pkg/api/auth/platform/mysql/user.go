@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 
@@ -12,7 +13,9 @@ type User struct{}
 
 // Create creates a new user on database
 func (u User) Create(db *sql.DB, user model.User) (model.User, error) {
-	statement, err := db.Prepare(`
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	statement, err := db.PrepareContext(ctx, `
 		INSERT INTO users
 		(first_name, last_name, username, email, password, created_at, updated_at, deleted_at)
 		VALUES(?, ?, ?, ?, ?, ?, ?, ?)
@@ -24,7 +27,7 @@ func (u User) Create(db *sql.DB, user model.User) (model.User, error) {
 
 	user.Base.BeforeCreate()
 
-	result, err := statement.Exec(user.FirstName, user.LastName, user.Username, user.Email, user.Password, user.CreatedAt, user.UpdatedAt, user.DeletedAt)
+	result, err := statement.ExecContext(ctx, user.FirstName, user.LastName, user.Username, user.Email, user.Password, user.CreatedAt, user.UpdatedAt, user.DeletedAt)
 	if err != nil {
 		return model.User{}, err
 	}
@@ -39,8 +42,10 @@ func (u User) Create(db *sql.DB, user model.User) (model.User, error) {
 
 // FindByID returns single user by ID
 func (User) FindByID(db *sql.DB, id int64) (model.User, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	var user model.User
-	row := db.QueryRow(
+	row := db.QueryRowContext(ctx,
 		`SELECT * FROM users WHERE id = (?)`, id,
 	)
 
@@ -64,9 +69,11 @@ func (User) FindByID(db *sql.DB, id int64) (model.User, error) {
 
 // FindByEmail returns single user by Email
 func (User) FindByEmail(db *sql.DB, email string) (model.User, error) {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 	var user model.User
 
-	row := db.QueryRow(
+	row := db.QueryRowContext(ctx,
 		`SELECT * FROM users WHERE email LIKE (?)`, email,
 	)
 
