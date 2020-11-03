@@ -8,7 +8,7 @@ import (
 	"github.com/mythio/go-rest-starter/pkg/common/model"
 )
 
-// User represents the client for user table
+// User represents the client for users table
 type User struct{}
 
 // Create creates a new user on database
