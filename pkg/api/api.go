@@ -4,9 +4,9 @@ import (
 	"crypto/sha1"
 	"fmt"
 
-	"github.com/mythio/go-rest-starter/pkg/api/auth"
-	authTransport "github.com/mythio/go-rest-starter/pkg/api/auth/transport"
 	"github.com/mythio/go-rest-starter/pkg/api/middleware"
+	"github.com/mythio/go-rest-starter/pkg/api/routes/auth"
+	authTransport "github.com/mythio/go-rest-starter/pkg/api/routes/auth/transport"
 	"github.com/mythio/go-rest-starter/pkg/common/db/mysql"
 	"github.com/mythio/go-rest-starter/pkg/common/util/jwt"
 	"github.com/mythio/go-rest-starter/pkg/common/util/logger"

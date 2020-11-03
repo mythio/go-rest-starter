@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -22,6 +21,11 @@ func CheckAuthToken(t TokenParser) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var h header
 		if err := c.ShouldBindHeader(&h); err != nil {
+			c.Error(gin.Error{
+				Err:  err,
+				Type: gin.ErrorTypeBind,
+				Meta: h,
+			})
 			c.Next()
 			return
 		}
@@ -38,8 +42,6 @@ func CheckAuthToken(t TokenParser) gin.HandlerFunc {
 		email := claims["e"].(string)
 		username := claims["u"].(string)
 
-		fmt.Println("in token:", id, email, username)
-
 		c.Set("id", id)
 		c.Set("email", email)
 		c.Set("username", username)
@@ -53,19 +55,19 @@ func RequireToken() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if _, exists := c.Get("id"); !exists {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"err": "no token passed",
+				"err": "no id",
 			})
 			return
 		}
 		if _, exists := c.Get("email"); !exists {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"err": "no token passed",
+				"err": "no email",
 			})
 			return
 		}
 		if _, exists := c.Get("username"); !exists {
 			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"err": "no token passed",
+				"err": "no username",
 			})
 			return
 		}

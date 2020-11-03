@@ -6,10 +6,10 @@ import (
 
 // Base contains common fields for all tables
 type Base struct {
-	ID        uint32 `json:"id" db:"id"`
-	CreatedAt int64  `json:"created_at" db:"created_at"`
-	UpdatedAt int64  `json:"updated_at" db:"updated_at"`
-	DeletedAt int64  `json:"deleted_at,omitempty" db:"deleted_at"`
+	ID        int64 `json:"id" db:"id"`
+	CreatedAt int64 `json:"created_at" db:"created_at"`
+	UpdatedAt int64 `json:"updated_at" db:"updated_at"`
+	DeletedAt int64 `json:"deleted_at,omitempty" db:"deleted_at"`
 }
 
 // BeforeCreate hooks into insert operations, setting createdAt and updatedAt to current time

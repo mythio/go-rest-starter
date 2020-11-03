@@ -4,21 +4,29 @@ import (
 	"database/sql"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/mythio/go-rest-starter/pkg/api/auth/platform/mysql"
+	"github.com/mythio/go-rest-starter/pkg/api/routes/auth/platform/mysql"
 	"github.com/mythio/go-rest-starter/pkg/common/model"
-	"github.com/mythio/go-rest-starter/pkg/common/model/res"
 	"github.com/mythio/go-rest-starter/pkg/common/util/logger"
 )
 
-// Service represents user application interface
-type Service interface {
-	Signup(model.User) (res.AuthUser, error)
-	Signin(model.User) (res.AuthUser, error)
-	Me(int64) (model.User, error)
+// Auth represents user application service
+type Auth struct {
+	db   *sql.DB
+	repo Repository
+	sec  Security
+	log  logger.Logger
+	tk   Token
 }
 
-// UserRepo represents user repository interface
-type UserRepo interface {
+// Service represents user application interface
+type Service interface {
+	Signup(ReqSignup) (ResSignup, error)
+	Signin(ReqSignin) (ResSignin, error)
+	Me(ReqMe) (ResMe, error)
+}
+
+// Repository represents user repository interface
+type Repository interface {
 	Create(*sql.DB, model.User) (model.User, error)
 	FindByID(*sql.DB, int64) (model.User, error)
 	FindByEmail(*sql.DB, string) (model.User, error)
@@ -36,23 +44,14 @@ type Token interface {
 	ParseToken(string) (*jwt.Token, error)
 }
 
-// Auth represents user application service
-type Auth struct {
-	db    *sql.DB
-	uRepo UserRepo
-	sec   Security
-	log   logger.Logger
-	tk    Token
-}
-
 // New creates new user application service
-func newUserApplicationService(db *sql.DB, repo UserRepo, sec Security, log logger.Logger, tk Token) *Auth {
+func newUserApplicationService(db *sql.DB, repo Repository, sec Security, log logger.Logger, tk Token) *Auth {
 	return &Auth{
-		db:    db,
-		uRepo: repo,
-		sec:   sec,
-		log:   log,
-		tk:    tk,
+		db:   db,
+		repo: repo,
+		sec:  sec,
+		log:  log,
+		tk:   tk,
 	}
 }
 

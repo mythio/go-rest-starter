@@ -5,9 +5,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mythio/go-rest-starter/pkg/api/auth"
 	"github.com/mythio/go-rest-starter/pkg/api/middleware"
-	"github.com/mythio/go-rest-starter/pkg/common/model"
+	"github.com/mythio/go-rest-starter/pkg/api/routes/auth"
+	"github.com/mythio/go-rest-starter/pkg/api/routes/auth/schema/req"
 )
 
 // HTTP represents user http service
@@ -27,7 +27,7 @@ func NewHTTP(service auth.Service, router *gin.RouterGroup) {
 }
 
 func (h *HTTP) signup(c *gin.Context) {
-	reqBody := &SignupReq{}
+	reqBody := &req.Signup{}
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error":   true,
@@ -46,7 +46,7 @@ func (h *HTTP) signup(c *gin.Context) {
 		return
 	}
 
-	authUser, err := h.service.Signup(model.User{
+	authUser, err := h.service.Signup(auth.ReqSignup{
 		Username:  reqBody.Username,
 		Password:  reqBody.Password,
 		Email:     reqBody.Email,
@@ -67,7 +67,7 @@ func (h *HTTP) signup(c *gin.Context) {
 }
 
 func (h *HTTP) signin(c *gin.Context) {
-	reqBody := &SigninReq{}
+	reqBody := &req.Signin{}
 	if err := c.ShouldBindJSON(reqBody); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{
 			"error":   true,
@@ -77,8 +77,7 @@ func (h *HTTP) signin(c *gin.Context) {
 		return
 	}
 
-	authUser, err := h.service.Signin(model.User{
-		Username: reqBody.Username,
+	authUser, err := h.service.Signin(auth.ReqSignin{
 		Email:    reqBody.Email,
 		Password: reqBody.Password,
 	})
@@ -97,7 +96,7 @@ func (h *HTTP) signin(c *gin.Context) {
 
 func (h *HTTP) me(c *gin.Context) {
 	meID := int64(c.GetInt("id"))
-	user, err := h.service.Me(meID)
+	user, err := h.service.Me(auth.ReqMe(meID))
 
 	fmt.Print(meID)
 
