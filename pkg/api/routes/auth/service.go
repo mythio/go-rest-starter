@@ -22,7 +22,7 @@ type Auth struct {
 type Service interface {
 	Signup(ReqSignup) (ResSignup, error)
 	Signin(ReqSignin) (ResSignin, error)
-	Me(ReqMe) (ResMe, error)
+	Me(int64) (ResMe, error)
 }
 
 // Repository represents user repository interface

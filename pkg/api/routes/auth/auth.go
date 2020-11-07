@@ -17,9 +17,6 @@ type userAttr struct {
 	UpdatedAt int64  `json:"updated_at"`
 }
 
-// ReqMe defines the id received by service
-type ReqMe int64
-
 // ResMe defines the user sent by service
 type ResMe userAttr
 
@@ -127,8 +124,8 @@ func (a *Auth) Signin(user ReqSignin) (ResSignin, error) {
 }
 
 // Me returns the current user
-func (a *Auth) Me(id ReqMe) (ResMe, error) {
-	_user, err := a.repo.FindByID(a.db, int64(id))
+func (a *Auth) Me(id int64) (ResMe, error) {
+	_user, err := a.repo.FindByID(a.db, id)
 	if err != nil {
 		return ResMe{}, err
 	}
