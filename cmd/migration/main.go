@@ -15,8 +15,8 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	res, err := db.ExecContext(ctx, `
-		CREATE TABLE users (
+	if _, err := db.ExecContext(ctx, `
+		CREATE TABLE IF NOT EXISTS users (
 			id					int AUTO_INCREMENT NOT NULL PRIMARY KEY,
 			first_name	text,
 			last_name		text,
@@ -26,11 +26,25 @@ func main() {
 			created_at 	bigint,
 			updated_at 	bigint,
 			deleted_at 	bigint
-		)
-	`)
-
-	if err != nil {
+		);
+	`); err != nil {
 		fmt.Println("err", err)
 	}
-	fmt.Println(res)
+
+	if _, err := db.ExecContext(ctx, `
+		CREATE TABLE IF NOT EXISTS posts (
+			id					int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+			author_id		int,
+			title				text,
+			body 				text,
+			likes				int,
+			created_at 	bigint,
+			updated_at 	bigint,
+			deleted_at 	bigint
+		);
+	`); err != nil {
+		fmt.Println("err", err)
+	}
+
+	fmt.Println("OK")
 }
