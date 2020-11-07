@@ -7,11 +7,7 @@ import (
 	"github.com/mythio/go-rest-starter/pkg/common/model"
 )
 
-// ReqMe defines the id received by service
-type ReqMe int64
-
-// ResMe defines the user sent by service
-type ResMe struct {
+type userAttr struct {
 	ID        int64  `json:"id"`
 	FirstName string `json:"first_name"`
 	LastName  string `json:"last_name"`
@@ -20,6 +16,12 @@ type ResMe struct {
 	CreatedAt int64  `json:"created_at"`
 	UpdatedAt int64  `json:"updated_at"`
 }
+
+// ReqMe defines the id received by service
+type ReqMe int64
+
+// ResMe defines the user sent by service
+type ResMe userAttr
 
 // ReqSignup defines the user recieved by service
 type ReqSignup struct {
@@ -41,7 +43,7 @@ type ReqSignin struct {
 
 // ResSignin defines the authenticated user sent by service
 type ResSignin struct {
-	User        ResMe
+	User        userAttr
 	AccessToken string `json:"access_token"`
 }
 
