@@ -14,5 +14,5 @@ func NewConnection(connectionURL string) (*sql.DB, error) {
 		return nil, err
 	}
 
-	return db, nil
+	return db, db.Ping()
 }

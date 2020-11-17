@@ -1,4 +1,4 @@
-package helper
+package pagination
 
 const (
 	paginationDefaultLimit  = 10
@@ -6,8 +6,8 @@ const (
 	paginationDefaultPageNo = 1
 )
 
-// PaginationReq holds pagination http fields and tags
-type PaginationReq struct {
+// ReqPagination holds pagination http fields and tags
+type ReqPagination struct {
 	PageNo   int
 	PageSize int
 }
@@ -19,7 +19,7 @@ type Pagination struct {
 }
 
 // Transform checks and converts http pagination into database pagination model
-func (p *PaginationReq) Transform() Pagination {
+func (p *ReqPagination) Transform() Pagination {
 	if p.PageSize < 1 {
 		p.PageSize = paginationDefaultLimit
 	}
