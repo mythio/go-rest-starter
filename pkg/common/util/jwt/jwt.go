@@ -10,6 +10,13 @@ import (
 	"github.com/mythio/go-rest-starter/pkg/common/model"
 )
 
+// Service provides a Json-Web-Token authentication implementation
+type Service struct {
+	key  []byte
+	ttl  time.Duration
+	algo jwt.SigningMethod
+}
+
 // New generates new JWT service necessary for auth middleware
 func New(algo, secret string, ttl uint32) (Service, error) {
 	signingMethod := jwt.GetSigningMethod(algo)
@@ -22,13 +29,6 @@ func New(algo, secret string, ttl uint32) (Service, error) {
 		algo: signingMethod,
 		ttl:  time.Duration(ttl) * time.Minute,
 	}, nil
-}
-
-// Service provides a Json-Web-Token authentication implementation
-type Service struct {
-	key  []byte
-	ttl  time.Duration
-	algo jwt.SigningMethod
 }
 
 // ParseToken parses token from Authorization header
