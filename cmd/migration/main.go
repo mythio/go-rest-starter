@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	db, err := mysql.NewConnection("root:password@tcp(127.0.0.1:3306)/test")
+	db, err := mysql.NewConnection("root:password@tcp(mythio_go-rest-starter_mysql:3306)/test")
 	if err != nil {
 		fmt.Println("err", err)
 	}

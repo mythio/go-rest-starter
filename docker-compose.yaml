@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  app:
+    container_name: mythio.go.app
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    networks:
+      - fullstack
+
+  mysql:
+    image: mysql:latest
+    container_name: mythio.go.mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - mythio.go.mysql.db:/var/lib/mysql
+    networks:
+      - fullstack
+
+networks:
+  fullstack:
+    driver: bridge
+
+volumes:
+  mythio.go.mysql.db:
