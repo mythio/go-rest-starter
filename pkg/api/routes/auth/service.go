@@ -6,7 +6,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/mythio/go-rest-starter/pkg/api/routes/auth/platform/mysql"
 	"github.com/mythio/go-rest-starter/pkg/common/model"
-	"github.com/mythio/go-rest-starter/pkg/common/util/logger"
 )
 
 // Auth represents user application service
@@ -14,7 +13,6 @@ type Auth struct {
 	db   *sql.DB
 	repo Repository
 	sec  Security
-	log  logger.Logger
 	tk   Token
 }
 
@@ -45,17 +43,16 @@ type Token interface {
 }
 
 // New creates new user application service
-func newUserApplicationService(db *sql.DB, repo Repository, sec Security, log logger.Logger, tk Token) *Auth {
+func newUserApplicationService(db *sql.DB, repo Repository, sec Security, tk Token) *Auth {
 	return &Auth{
 		db:   db,
 		repo: repo,
 		sec:  sec,
-		log:  log,
 		tk:   tk,
 	}
 }
 
 // InitService initializes auth application service
-func InitService(db *sql.DB, sec Security, log logger.Logger, tk Token) *Auth {
-	return newUserApplicationService(db, mysql.User{}, sec, log, tk)
+func InitService(db *sql.DB, sec Security, tk Token) *Auth {
+	return newUserApplicationService(db, mysql.User{}, sec, tk)
 }
